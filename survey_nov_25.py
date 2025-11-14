@@ -256,6 +256,31 @@ capture_rate = (total_reviews + declined) / len_nav * 100
 capture_rate = round(capture_rate)
 print(f'{report_month} Capture Rate: {capture_rate}%')
 
+# Capture Rate Gauge:
+capture_rate_gauge = go.Figure(go.Indicator(
+    mode = "gauge+number",
+    value = capture_rate,
+    number = {'suffix': "%"},
+    gauge = {
+        'axis': {'range': [None, 100]},
+        'bar': {'color': "darkblue"},
+        'steps' : [
+            {'range': [0, 50], 'color': "red"},
+            {'range': [50, 75], 'color': "yellow"},
+            {'range': [75, 100], 'color': "green"}
+        ],
+    }
+)).update_layout(
+    height=400,
+    width=600,
+    paper_bgcolor='rgba(0,0,0,0)',
+    plot_bgcolor='rgba(0,0,0,0)',
+    font=dict(size=14),
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+
+
 # =========================== Ratings Analysis ============================ #
 
 # Define a standardized color palette for ratings 1 to 5
@@ -316,7 +341,9 @@ physical_score = round(physical_score, 1)
 
 total_score = (health_score + mental_score + stress_score + physical_score) / 4
 total_score = round(total_score, 1)
-# print(f'Total Score: ', total_score)
+print(f'Total Score: ', total_score)
+
+# 
 
 # ==========================================
 
@@ -1757,20 +1784,29 @@ html.Div(
                     ]
                 ),
 
+                # html.Div(
+                #     className='circle-box',
+                #     children=[
+                #         html.Div(
+                #             className='circle-4',
+                #             children=[
+                #                 html.H1(
+                #                 className='rollup-number-2',
+                #                 children=[f'{capture_rate}%']
+                #                 ),
+                #             ]
+                #         )
+                #     ],
+                # ),
                 html.Div(
                     className='circle-box',
                     children=[
-                        html.Div(
-                            className='circle-4',
-                            children=[
-                                html.H1(
-                                className='rollup-number-2',
-                                children=[f'{capture_rate}%']
-                                ),
-                            ]
+                        dcc.Graph(
+                            className='gauge',
+                            figure=capture_rate_gauge
                         )
-                    ],
-                ),
+                    ]
+                )
             ]
         ),
     ]
