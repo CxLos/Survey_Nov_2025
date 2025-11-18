@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: survey-nov-2025
+    runtime: python
+    plan: free
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn survey_nov_25:server
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
